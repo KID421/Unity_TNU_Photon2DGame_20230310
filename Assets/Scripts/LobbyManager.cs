@@ -19,6 +19,18 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         PhotonNetwork.ConnectUsingSettings();
     }
 
+    public void StartGame()
+    {
+        photonView.RPC("RPCStartGame", RpcTarget.All);
+    }
+
+    [PunRPC]
+    private void RPCStartGame()
+    {
+        PhotonNetwork.CurrentRoom.IsOpen = false;
+        PhotonNetwork.LoadLevel("遊戲場景");
+    }
+
     public void InputFieldPlayerName(string value)
     {
         print("玩家名稱：" + value);
