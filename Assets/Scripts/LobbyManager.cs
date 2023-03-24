@@ -79,4 +79,29 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         textRoomName.text = PhotonNetwork.CurrentRoom.Name;
         textRoomPlayer.text = "房間人數：" + PhotonNetwork.CurrentRoom.PlayerCount + " / " + PhotonNetwork.CurrentRoom.MaxPlayers;
     }
+
+    // 按鈕呼叫用
+    public void ButtonStartGame()
+    {
+        // Photon 呼叫遠端同步方法
+        // RPC("方法名稱"，伺服器內的哪些玩家)
+        photonView.RPC("RPCStartGame", RpcTarget.All);
+    }
+
+    // 按鈕不能直接呼叫此方法
+    // 遠端同步玩家方法：通知所有玩家做一些處理
+    [PunRPC]
+    public void RPCStartGame()
+    {
+        // 讓所有玩家進到遊戲場景
+        PhotonNetwork.LoadLevel("遊戲場景");
+    }
+
+    // 當玩家進入房間會執行的程式區域
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        base.OnPlayerEnteredRoom(newPlayer);
+
+        textRoomPlayer.text = "房間人數：" + PhotonNetwork.CurrentRoom.PlayerCount + " / " + PhotonNetwork.CurrentRoom.MaxPlayers;
+    }
 }
